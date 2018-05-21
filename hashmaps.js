@@ -45,6 +45,11 @@ class HashMap {
     this._deleted++;
   }
 
+  orginalHashVal(key) {
+    const hash = HashMap._hashString(key);
+    return hash % this._capacity;
+  }
+
   _findSlot(key) {
     const hash = HashMap._hashString(key);
     const start = hash % this._capacity;
@@ -89,19 +94,19 @@ HashMap.SIZE_RATIO = 3;
 function main() {
   const lor = new HashMap();
   
-  lor.set('Hobbit','Bilbo'); 
-  lor.set('Hobbit','Frodo');
-  lor.set('Wizard','Gandolf');
-  lor.set('Human','Aragon');
-  lor.set('Elf','Legolas');
-  lor.set('Maiar','The Necromancer');
-  lor.set('Maiar','Sauron');
-  lor.set('RingBearer','Gollum');
-  lor.set('LadyOfLight','Galadriel');
-  lor.set('HalfElven','Arwen');
-  lor.set('Ent','Treebeard');
+//   lor.set('Hobbit','Bilbo'); 
+//   lor.set('Hobbit','Frodo');
+//   lor.set('Wizard','Gandolf');
+//   lor.set('Human','Aragon');
+//   lor.set('Elf','Legolas');
+//   lor.set('Maiar','The Necromancer');
+//   lor.set('Maiar','Sauron');
+//   lor.set('RingBearer','Gollum');
+//   lor.set('LadyOfLight','Galadriel');
+//   lor.set('HalfElven','Arwen');
+//   lor.set('Ent','Treebeard');
 
-  console.log(lor);
+//   console.log(lor.get('fdf'));
 
 
 }
@@ -109,8 +114,62 @@ function main() {
 main();
 
 function isPalindrome(str) {
- 
+  const hashmap = new HashMap();
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === ' ') {
+      continue;
+    }
+    hashmap.set(str[i], 0);
+  }
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === ' ') {
+      continue;
+    }
+    let valueToInc = hashmap.get(str[i]);
+    hashmap.set(str[i], valueToInc + 1);
+  } 
+  let numberOfOdd = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === ' ') {
+      continue;
+    }
+    let value = hashmap.get(str[i]);
+    if (value % 2 !== 0) {
+      numberOfOdd++;
+    }
+  }
+  if (numberOfOdd > 1) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
-isPalindrome('acecarr');
+// console.log(isPalindrome('never odd or even'));
+
+function groupAnagrams(arr) {
+  const hashmap = new HashMap();
+  for (let i = 0; i < arr.length; i++) {
+    hashmap.set(arr[i], hashmap.orginalHashVal(arr[i]));
+  }
+  let currentValue = hashmap._slots[0].value;
+  let result = [];
+  let currentArr = [];
+  for (let i = 0; i < hashmap._slots.length; i++) {
+    if (hashmap._slots[i]) {
+      if (currentValue === hashmap._slots[i].value) {
+        currentArr.push(hashmap._slots[i].key); 
+      } else {
+        result.push(currentArr);
+        currentArr = [];
+        currentValue = hashmap._slots[i].value;
+        currentArr.push(hashmap._slots[i].key);
+      }
+    }
+  }
+  result.push(currentArr);
+  return result;
+}
+
+// console.log(groupAnagrams(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']));
 
