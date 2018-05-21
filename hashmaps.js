@@ -23,12 +23,15 @@ class HashMap {
     }
 
     const index = this._findSlot(key);
+    if (!this._slots[index]) {
+      this.length++;
+    }
     this._slots[index] = {
       key,
       value,
       deleted: false
     };
-    this.length++;
+    
   }
 
   remove(key) {
@@ -49,7 +52,7 @@ class HashMap {
     for (let i=start; i<start + this._capacity; i++) {
       const index = i % this._capacity;
       const slot = this._slots[index];
-      if (slot === undefined || (slot.key == key && !slot.deleted)) {
+      if (slot === undefined || (slot.key === key && !slot.deleted)) {
         return index;
       }
     }
@@ -98,9 +101,16 @@ function main() {
   lor.set('HalfElven','Arwen');
   lor.set('Ent','Treebeard');
 
-  console.log(lor.get('Maiar'));
+  console.log(lor);
 
 
 }
 
 main();
+
+function isPalindrome(str) {
+ 
+}
+
+isPalindrome('acecarr');
+
